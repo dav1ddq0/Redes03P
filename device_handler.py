@@ -21,12 +21,12 @@ class Device_handler:
     # def hosts(self):
     #     return self.hosts
 
-    def __init__(self, slot_time: int, key:str) -> None:
+    def __init__(self, slot_time: int, error_detection:str) -> None:
         self.hosts = []
         self.switches = []
         self.time = 0
         self.slot_time = slot_time
-        self.key = key
+        self.error_detection = error_detection
         # diccionario que va a guardar todos los puertos de todos los devices para poder acceder de manera rapida a los mismo en 
         # las operaciones necesarias
         self.ports = {}
@@ -123,7 +123,7 @@ class Device_handler:
     def create_pc(self, name: str, time: int):
         # actualiza la red hasta que llegues al time en que vino la nueva instruccion
         self.__update_network_status(time)
-        newpc = objs.Host(name)
+        newpc = objs.Host(name,self.error_detection)
         self.hosts.append(newpc)
         # agrego el unico puerto que tiene un host al dicc que contiene todos los puertos de la red
         self.ports[newpc.port.name] = newpc.port
@@ -308,7 +308,9 @@ class Device_handler:
 
         if self.__validate_send_frame(origin_pc, destiny_mac, data):
             host = self.ports[f'{origin_pc}_1'].device
-            encode = format(int(errors_algs.CRCEncode(data), base = 2), '08b')
+            if self.error_detection == 'crc':
+                encode = format(int(errors_algs.CRCEncode(data), base = 2), '08b')
+
             databin = format(int(data, base = 16), '08b')
             data_frame = format(int(destiny_mac, base = 16), '16b') + format(int(host.mac, base=16), '16b') + format(len(databin)//8, '08b') + format(len(encode)//8, '08b') + databin + encode
             l = len(data_frame)

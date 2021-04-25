@@ -34,7 +34,7 @@ class Port:
 
 
 class Host:
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: str, error_detection) -> None:
         self.name = name
         portname = f"{name}_1"
         port = Port(portname, self)
@@ -61,6 +61,7 @@ class Host:
         self.file_d =f"./Hosts/{name}_data.txt"
         self.incoming_frame =""
         self.slot_time = 3
+        self.error_detection = error_detection
         f = open(self.file, 'w')
         f.close()
         f = open(self.file_d, 'w')

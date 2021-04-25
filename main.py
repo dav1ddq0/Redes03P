@@ -2,10 +2,10 @@ import sys, argparse
 import device_handler as dh
 import myParser
 
-slot_time = 3
-key = '1001'
+slot_time = int(open('./signal_time.txt', 'r').readline())
+error_detection = open('./config.txt', 'r').readline()
 
-handler = dh.Device_handler(slot_time,key)        
+handler = dh.Device_handler(slot_time, error_detection)
 # dicc that func like a launcher to the principal methods
 caller ={
         "hub" : lambda args:  handler.create_hub(args[0], args[1], args[2]),
