@@ -51,7 +51,7 @@ def CRCEncode(data):
 def CRCDecode(data):
     # x^3+x+1 representing en bin like 1 0 1 1 
     # Add n-1 zeroes at end of data where n is len of key 
-    remainder = mod2div(data)
+    remainder = mod2div(data, crc_key)
     
     return remainder
 

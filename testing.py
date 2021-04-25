@@ -49,4 +49,4 @@ def CRC(data,key):
     codeword = data + remainder
     return remainder    
 
-print(CRC('10101','1011'))
+# print(CRC('10101','1011'))

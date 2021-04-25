@@ -163,7 +163,7 @@ class Host:
                 data = self.rframe[48:48+nsizebits]
                 verification_data = self.rframe[48+nsizebits:]
                 data_to_verify = data + verification_data
-                decode = errors_algs.CRCDecode(data_to_verify)
+                decode = format(int(errors_algs.CRCDecode(data_to_verify), base = 2), '08b')
                 errors = errors_algs.CheckError(decode)
                 datahex = '{:X}'.format(int(data,2))
                 if errors:
