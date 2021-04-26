@@ -73,6 +73,10 @@ class Host:
         f.write(message)
         f.close()
 
+    def log_hamming(self, source_mac, time, data_fixed):
+        message = f"{time} {source_mac} {data_fixed} corrected by hamming"
+        self.__update_file(message, self.file_d)
+
     def log(self, data, action, time, collison=False):
         terminal = "collision" if collison else "ok"
         message = f"{time} {self.port.name} {action} {data} {terminal}\n"
@@ -163,16 +167,30 @@ class Host:
                 #obtengo en hexadecimal la data 
                 data = self.rframe[48:48+nsizebits]
                 verification_data = self.rframe[48+nsizebits:]
-                data_to_verify = data + verification_data
-                decode = format(int(errors_algs.CRCDecode(data_to_verify), base = 2), '08b')
-                errors = errors_algs.CheckError(decode)
                 datahex = '{:X}'.format(int(data,2))
-                if errors:
-                    self.log_frame(origin_mac, datahex, time, True)
-                else:
-                    # guardo en el file _data.txt la trama que recibio la pc
-                    self.log_frame(origin_mac, datahex, time)
+                if self.error_detection =='crc':
+                    data_to_verify = data + verification_data
+                    decode = format(int(errors_algs.CRCDecode(data_to_verify), base = 2), '08b')
+                    errors = errors_algs.CheckError(decode)
+                    if errors:
+                        self.log_frame(origin_mac, datahex, time, True)
+                    else:
+                        # guardo en el file _data.txt la trama que recibio la pc
+                        self.log_frame(origin_mac, datahex, time)
                 
+                else:
+                    encoded_data,_ = errors_algs.hamming_encode(data)
+                    errors,error_index = errors_algs.detect_error(encoded_data, int(verification_data,2))
+                    if errors:
+                        self.log_frame(origin_mac, datahex, time,True)
+                        encode_fixed = errors_algs.fix_bit(encoded_data, error_index)
+                        original_fixed = errors_algs.hamming_decode(encode_fixed)
+                        original_fixed_hex = '{:X}'.format(int(original_fixed,2))
+                        self.log_hamming(origin_mac, time, original_fixed_hex)
+
+                    else:
+                        # guardo en el file _data.txt la trama que recibio la pc
+                        self.log_frame(origin_mac, datahex, time)    
                 self.rframe =""    
 
 

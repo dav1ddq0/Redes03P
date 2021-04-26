@@ -310,10 +310,11 @@ class Device_handler:
             host = self.ports[f'{origin_pc}_1'].device
             if self.error_detection == 'crc':
                 encode = format(int(errors_algs.CRCEncode(data), base = 2), '08b')
-
+            else:
+                _,redundant_bits_amount = errors_algs.hamming_encode(data)
+                encode = format(redundant_bits_amount, '08b')
             databin = format(int(data, base = 16), '08b')
             data_frame = format(int(destiny_mac, base = 16), '16b') + format(int(host.mac, base=16), '16b') + format(len(databin)//8, '08b') + format(len(encode)//8, '08b') + databin + encode
-            l = len(data_frame)
             host.add_frame(data_frame)
             # en caso que el host este disponible para enviar pues el mismo puede estar
             # en medio de una transmision o estar esperando producto de una colision a enviar un dato fallido 

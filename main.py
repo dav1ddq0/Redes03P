@@ -2,7 +2,9 @@ import sys, argparse
 import device_handler as dh
 import myParser
 
+#load the configurable signal_time
 slot_time = int(open('./signal_time.txt', 'r').readline())
+# load the configurable error_detection
 error_detection = open('./config.txt', 'r').readline()
 
 handler = dh.Device_handler(slot_time, error_detection)
