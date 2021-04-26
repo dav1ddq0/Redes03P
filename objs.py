@@ -183,8 +183,8 @@ class Host:
                     errors,error_index = errors_algs.detect_error(encoded_data, int(verification_data,2))
                     if errors:
                         self.log_frame(origin_mac, datahex, time,True)
-                        encode_fixed = errors_algs.fix_bit(encoded_data, error_index)
-                        original_fixed = errors_algs.hamming_decode(encode_fixed)
+                        original_error_index = errors_algs.calc_error_bit_pos(error_index)
+                        original_fixed = errors_algs.fix_bit(data, original_error_index)
                         original_fixed_hex = '{:X}'.format(int(original_fixed,2))
                         self.log_hamming(origin_mac, time, original_fixed_hex)
 

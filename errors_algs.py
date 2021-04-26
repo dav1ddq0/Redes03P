@@ -9,7 +9,7 @@ def xor(n1, n2):
     
     return ''.join(result)
 
-crc_key = '1001'
+crc_key = '1011'
 
 def mod2div(divident, divisor):
     # Number of bits to be XORed at a time.
