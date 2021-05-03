@@ -62,6 +62,8 @@ class Host:
         self.incoming_frame =""
         self.slot_time = 3
         self.error_detection = error_detection
+        self.ip = None
+        self.mask =
         f = open(self.file, 'w')
         f.close()
         f = open(self.file_d, 'w')

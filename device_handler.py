@@ -2,7 +2,8 @@
 import objs
 import string
 import errors_algs
-
+import re
+import network_layer_utils as netl
 errors = {1 : "do not has a cable connected", 2: "does not exist", 3: "is not free", 4: "the device must be a host",
         5: "host busy (collision)", 6: "has a cable connected, but its other endpoint is not connected to another device" }
 class bcolors:
@@ -24,6 +25,7 @@ class Device_handler:
     def __init__(self, slot_time: int, error_detection:str) -> None:
         self.hosts = []
         self.switches = []
+        self.routers = []
         self.time = 0
         self.slot_time = slot_time
         self.error_detection = error_detection
@@ -104,6 +106,15 @@ class Device_handler:
             return False
         return True            
 
+    def __validate_ip(self, name, ip, mask):
+        if all(h.name != name for h in self.hosts) and all(r.name != name for r in self.routers):
+            return False
+        if not netl.ValidIP(ip) or not netl.ValidIP(mask):
+            return False
+        return True
+
+
+
     def finished_network_transmission(self):
         # al no quedar mas instruccionens por ejecutar
         # mantengo recorrido de los devices mientras haya alguna
@@ -143,6 +154,7 @@ class Device_handler:
         for port in newswitch.ports:
             self.ports[port.name] = port
 
+    def setup_ip(host, ip , mask):
 
     def setup_mac(self, host, address, time: int):
         
