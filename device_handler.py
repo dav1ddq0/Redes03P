@@ -154,7 +154,16 @@ class Device_handler:
         for port in newswitch.ports:
             self.ports[port.name] = port
 
-    def setup_ip(host, ip , mask):
+    def setup_ip(self, name, ip , mask):
+        if self.__validate_ip(name, ip, mask):
+            if any(h.name == name for h in self.hosts):
+                self.ports[origin_pc+'_1'].device
+
+
+            else:
+
+
+            
 
     def setup_mac(self, host, address, time: int):
         

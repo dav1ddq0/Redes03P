@@ -32,7 +32,13 @@ class Port:
         # un puerto conoce con que puerto esta conectado
         self.next = None
 
+class Router:
+    def __init__()->None:
+        return None
 
+    def setup_ip():
+        return None
+            
 class Host:
     def __init__(self, name: str, error_detection) -> None:
         self.name = name
@@ -69,6 +75,9 @@ class Host:
         f = open(self.file_d, 'w')
         f.close()
         
+    def setup_ip(self, ip, mask):
+        self.ip = ip
+        self.mask = mask
 
     def __update_file(self, message, file):
         f = open(file, 'a')
